@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using IdentityDemo.Models;
 using IdentityDemo.Views.Account;
 
+
 namespace IdentityDemo.Controllers
 {
     public class AccountController : Controller
@@ -17,7 +18,7 @@ namespace IdentityDemo.Controllers
         {
             this.accountService = accountService;
         }
-
+        [Authorize]
         [HttpGet("members")]
         public IActionResult Members()
         {
@@ -32,13 +33,13 @@ namespace IdentityDemo.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterVM viewModel)
+        public async Task<IActionResult> RegisterAsync(RegisterVM viewModel)
         {
             if (!ModelState.IsValid)
                 return View();
 
             // Try to register user
-            var errorMessage = accountService.TryRegister(viewModel);
+            string errorMessage = await accountService.TryRegisterAsync(viewModel);
             if (errorMessage != null)
             {
                 // Show error
@@ -57,17 +58,17 @@ namespace IdentityDemo.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginVM viewModel)
+        public async Task<IActionResult> LoginAsync(LoginVM viewModel)
         {
             if (!ModelState.IsValid)
                 return View();
 
             // Check if credentials is valid (and set auth cookie)
-            var errorMessage = accountService.TryLogin(viewModel);
-            if (errorMessage != null)
+            var success = await accountService.TryLoginAsync(viewModel);
+            if (!success)
             {
                 // Show error
-                ModelState.AddModelError(string.Empty, errorMessage);
+                ModelState.AddModelError(string.Empty, "Login failed");
                 return View();
             }
 

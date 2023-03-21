@@ -14,10 +14,7 @@ var connString = builder.Configuration
 builder.Services.AddDbContext<ApplicationContext>
     (o => o.UseSqlServer(connString));
 
-// Registera identity-klasserna och vilken DbContext som ska användas
-//builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationContext>()
-//    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
 // Specificera att cookies ska användas och URL till inloggnings-sidan
 builder.Services.ConfigureApplicationCookie(o => o.LoginPath = "/login");

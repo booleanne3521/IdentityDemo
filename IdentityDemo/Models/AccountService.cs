@@ -1,19 +1,46 @@
 ﻿using IdentityDemo.Views.Account;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityDemo.Models
 {
     public class AccountService
     {
-        public string TryRegister(RegisterVM viewModel)
+        UserManager<ApplicationUser> userManager;
+        SignInManager<ApplicationUser> signInManager;
+        RoleManager<IdentityRole> roleManager;
+
+        public AccountService(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
-            // Todo: Try to create a new user
-            return "Failed to create user";
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
-        public string TryLogin(LoginVM viewModel)
+    public async Task<string> TryRegisterAsync(RegisterVM viewModel)
         {
-            // Todo: Try to sign user
-            return "Login failed";
+            var user = new ApplicationUser
+            {
+                UserName = viewModel.Username,
+            };
+
+            IdentityResult result = await userManager.CreateAsync(user, viewModel.Password);
+            return result.Errors.FirstOrDefault()?.Description;
+
+        }
+
+        public async Task<bool> TryLoginAsync(LoginVM viewModel)
+        {
+            SignInResult result = await signInManager.PasswordSignInAsync(
+         viewModel.Username,
+         viewModel.Password,
+         isPersistent: false,
+         lockoutOnFailure: false);
+
+            return result.Succeeded;
+
         }
     }
 }
