@@ -1,2 +1,11 @@
 ﻿<h3>Members</h3>
-Welcome member - you are logged in as: @User.Identity.Name
+@if (User.Identity.IsAuthenticated)
+{
+<a asp-controller="Account" asp-action="Logout">Sign out</a>
+	<p>Logged in user: @User.Identity.Name </p>
+}
+else
+{
+<a asp-controller="Account" asp-action="Register">Register</a>
+<a asp-controller="Account" asp-action="Login">Sign In</a>
+}

@@ -25,7 +25,14 @@ namespace IdentityDemo.Controllers
             return View();
         }
 
-        [HttpGet("")]
+		[Route("members")]
+		public IActionResult Logout()
+		{
+   
+            return RedirectToAction(nameof(Login));
+		}
+
+		[HttpGet("")]
         [HttpGet("register")]
         public IActionResult Register()
         {
