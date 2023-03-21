@@ -43,17 +43,9 @@ namespace IdentityDemo.Models
             return result.Succeeded;
 
         }
-		public async Task<bool> TryLogoutAsync(LoginVM viewModel)
-		{
-			SignInResult result = await signInManager.LogoutAsync()
-			//SignInResult result = await signInManager.PasswordSignInAsync(
-		 //viewModel.Username,
-		 //viewModel.Password,
-		 //isPersistent: false,
-		 //lockoutOnFailure: false);
-
-			return result.Succeeded;
-
+        public async void TryLogoutAsync()
+        {
+            await signInManager.SignOutAsync();
 		}
-	}
+    }
 }

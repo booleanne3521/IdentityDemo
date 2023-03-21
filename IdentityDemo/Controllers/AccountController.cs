@@ -25,13 +25,6 @@ namespace IdentityDemo.Controllers
             return View();
         }
 
-		[Route("members")]
-		public IActionResult Logout()
-		{
-   
-            return RedirectToAction(nameof(Login));
-		}
-
 		[HttpGet("")]
         [HttpGet("register")]
         public IActionResult Register()
@@ -82,5 +75,12 @@ namespace IdentityDemo.Controllers
             // Redirect user
             return RedirectToAction(nameof(Members));
         }
-    }
+
+		[HttpGet("Logout")]
+		public IActionResult Logout()
+		{
+			accountService.TryLogoutAsync();
+			return RedirectToAction(nameof(Login));
+		}
+	}
 }
